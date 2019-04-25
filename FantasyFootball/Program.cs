@@ -14,27 +14,37 @@ namespace FantasyFootball
         static void Main(string[] args)
         {
             // Connect to client and get data
-            var client = new NFLv3ProjectionsClient("1996605cd1e84deeae0aab46b07dcf83");
-            var projections = client.GetFantasyDefenseProjectionsByGame("2018",7).OrderByDescending(p => p.PointsAllowed).Take(20).ToList();
+            NFLv3StatsClient client = new NFLv3StatsClient("apikey"); 
+            var projections = client.GetTeamGameStats("2018", 7).OrderByDescending(p => p.PasserRating).Take(20).ToList();
 
             // Write data to console
             foreach (var projection in projections)
             {
-                Console.WriteLine($"{projection.PlayerID} - {projection.Team} ({projection.PointsAllowed}) Points Allowed by Defense ST: {projection.PointsAllowedByDefenseSpecialTeams}");
+                Console.WriteLine($"{projection.Team} ({projection.PasserRating}) {projection.PasserRating}");
             }
             Console.ReadKey();
 
-            MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
+            //var dbClient = new MongoClient("mongodb://127.0.0.1:27017"); 
+            var vom = new GeneralPlayer();
+            vom.name = "Matt Ryan";
+            vom.GetPlayerInfo(vom, client);
 
-            //Database List  
-            var dbList = dbClient.ListDatabases().ToList();
+            Console.WriteLine($"{vom.playerID} ----- {vom.name} --- {vom.number} ---- {vom.team} ---- {vom.position}");
+            Console.ReadKey();
 
-            Console.WriteLine("The list of databases are :");
-            foreach (var item in dbList)
+
+
+
+            /*var db = dbClient.GetDatabase("test");
+            var collection = db.GetCollection<User>("test");
+            var document = new User
             {
-                Console.WriteLine(item);
-            }
-            Console.ReadKey();
+                userName = "Hello"
+            };
+            collection.InsertOne(document);
+            */
+
+
 
 
         }

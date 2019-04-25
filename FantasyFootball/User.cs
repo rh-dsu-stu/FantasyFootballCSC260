@@ -5,32 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using MongoDB.Driver.Linq;
 
 namespace FantasyFootball
 {
     class User
     {
-        private string _userName;
 
-        public string UserName => _userName;
+        public ObjectId ID { get; set; }
+        public string userName { get; set; }
 
 
-        public User(string userName)
+        
+
+        public User()
         {
-            if (userName == null)
-            {
-                throw new ArgumentNullException(nameof(userName));
-            }
-            _userName = userName;
+            
         }
 
-        public bool UserNameExists(IMongoDatabase database, string userName)
-        {
-            var filter = new BsonDocument("name", userName);
-            var options = new ListCollectionNamesOptions { Filter = filter };
 
-            return database.ListCollectionNames(options).Any();
-        }
 
         
     }
