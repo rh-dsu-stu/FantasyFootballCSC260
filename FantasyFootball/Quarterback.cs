@@ -12,7 +12,7 @@ namespace FantasyFootball
 {
     class Quarterback : GeneralPlayer
     {
-        public ObjectId id;
+        
         public int passAtt;
         public int passCmp;
         public double passYds;

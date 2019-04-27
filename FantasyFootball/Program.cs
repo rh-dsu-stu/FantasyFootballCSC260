@@ -38,7 +38,7 @@ namespace FantasyFootball
                         break;
                     case 2:
                         Database.SaveTeam(teamList);
-                        Console.WriteLine("Team Saved");
+                        Console.WriteLine("Team Saved\n");
                         break;
                     case 3:
                         play.GetStats(teamList);
@@ -57,7 +57,7 @@ namespace FantasyFootball
             }
            
 
-            Console.ReadKey();
+            
 
 
             

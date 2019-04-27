@@ -7,14 +7,17 @@ using FantasyData.Api.Client;
 using FantasyData.Api.Client.Model.NFLv3;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization;
 
 
 namespace FantasyFootball
 {
+    [BsonKnownTypes(typeof(Quarterback), typeof(WRRBTE), typeof(Kicker))]
     class GeneralPlayer
     {
         // these fields apply to every player and should be inheritable by the other classes
-        public ObjectId id { get; set; }
+        public ObjectId Id { get; set; }
         public string name { get; set; }
         public int playerID { get; set; }
         public string team { get; set; }

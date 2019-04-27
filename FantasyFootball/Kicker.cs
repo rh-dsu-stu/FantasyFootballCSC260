@@ -12,7 +12,7 @@ namespace FantasyFootball
 {
     class Kicker : GeneralPlayer 
     {
-        public ObjectId id;
+        
         public int fgAtt;
         public int fgMade;
         public int epAtt;

@@ -12,7 +12,7 @@ namespace FantasyFootball
 {
     class WRRBTE : GeneralPlayer
     {
-        public ObjectId id;
+        
         public int rushAtt;
         public double rushYds;
         public int rushTDs;
