@@ -17,8 +17,6 @@ namespace FantasyFootball
             NFLv3StatsClient client = new NFLv3StatsClient("apikey");
             //var projections = client.GetTeamGameStats("2018", 7).OrderByDescending(p => p.PasserRating).Take(20).ToList();
 
-
-
             string teamName = "";
             GeneralPlayer play = new GeneralPlayer();
             List<GeneralPlayer> teamList = new List<GeneralPlayer>();
@@ -34,14 +32,13 @@ namespace FantasyFootball
                         var team = new List<GeneralPlayer>();
                         team = play.FillTeam(client);
                         teamList = team;
-                        //play.GetStats(team);
                         break;
                     case 2:
                         Database.SaveTeam(teamList);
                         Console.WriteLine("Team Saved\n");
                         break;
                     case 3:
-                        play.GetStats(teamList);
+                        play.GetStats(teamList, client);
                         play.PrintStats(teamList);
                         break;
                     case 4:
@@ -49,8 +46,9 @@ namespace FantasyFootball
                         teamList = Database.GetSavedTeam(teamName);
                         break;
                     case 5:
-
-
+                        var ppr = FantasyPoints.GetPPR();
+                        FantasyPoints.CalcFantasyPoints(teamList, ppr);
+                        FantasyPoints.PrintFantasyPoints(teamList);
                         break;
 
                 }

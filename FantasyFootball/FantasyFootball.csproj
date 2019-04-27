@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Database.cs" />
     <Compile Include="Defense.cs" />
+    <Compile Include="FantasyPoints.cs" />
     <Compile Include="Kicker.cs" />
     <Compile Include="GeneralPlayer.cs" />
     <Compile Include="Program.cs" />

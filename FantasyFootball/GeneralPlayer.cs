@@ -8,11 +8,10 @@ using FantasyData.Api.Client.Model.NFLv3;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization;
-
 
 namespace FantasyFootball
 {
+    // lets the database know the derived classes of this class
     [BsonKnownTypes(typeof(Quarterback), typeof(WRRBTE), typeof(Kicker))]
     class GeneralPlayer
     {
@@ -24,6 +23,7 @@ namespace FantasyFootball
         public string position { get; set; }
         public int number { get; set; }
         public int fumbles { get; set; }
+        public double fantasyPts { get; set; }
 
         // default constructor
         // paramaterless constructor can be used when storing objects in mongoDB
@@ -35,8 +35,10 @@ namespace FantasyFootball
             position = "";
             number = 0;
             fumbles = 0;
+            fantasyPts = 0;
         }
 
+        //destructor
         ~GeneralPlayer()
         {
         }
@@ -44,7 +46,7 @@ namespace FantasyFootball
         // function to get player's name
         public string GetPlayersName()
         {
-            Console.WriteLine("Please enter a player's first name: ");
+            Console.WriteLine("Please enter a player's name: ");
             var name = Console.ReadLine();
 
             return name;
@@ -91,13 +93,8 @@ namespace FantasyFootball
             f.number = (int)tmpPlayer.Number;
         }
 
-        public virtual void GetStat()
-        {
-
-        }
-
         // seperates the list into lists of player types and then gets their stats
-        public void GetStats(List<GeneralPlayer> list)
+        public void GetStats(List<GeneralPlayer> list, NFLv3StatsClient client)
         {
             Console.WriteLine("What week would you like stats for?");
             Console.WriteLine("Please enter a number between 1 and 17");
@@ -105,7 +102,6 @@ namespace FantasyFootball
             var quarters = list.OfType<Quarterback>();
             var wrrbtes = list.OfType<WRRBTE>();
             var kicker = list.OfType<Kicker>();
-            NFLv3StatsClient client = new NFLv3StatsClient("1996605cd1e84deeae0aab46b07dcf83");
 
             foreach (var q in quarters)
             {
@@ -122,8 +118,6 @@ namespace FantasyFootball
                 k.GetKickerStats(k, client, week);
             }
 
-
-
         }
 
         public void PrintStats(List<GeneralPlayer> list)
@@ -133,22 +127,22 @@ namespace FantasyFootball
             var kicker = list.OfType<Kicker>();
 
             Console.WriteLine("Weekly Stats");
-            Console.WriteLine("Name\t\t\t" + "Att\t" + "Cmp\t" + "Yds\t" + "TDs\t" + "Int\t" + "Sacks\t" + "rYds\t" + "rTDs\t" + "fum\t");
+            Console.WriteLine("Name\t\t\t" + "Pos\t" + "Att\t" + "Cmp\t" + "Yds\t" + "TDs\t" + "Int\t" + "Sacks\t" + "rYds\t" + "rTDs\t" + "fum\t");
             foreach (var q in quarters)
             {
-                Console.WriteLine("{0}\t\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}", q.name, q.passAtt, q.passCmp, q.passYds,
+                Console.WriteLine("{0}\t\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}", q.name, q.position, q.passAtt, q.passCmp, q.passYds,
                     q.passTDs, q.interc, q.sacks, q.rushYds, q.rushTDs, q.fumbles);
             };
-            Console.WriteLine("Name\t\t\t" + "RAtt\t" + "rYds\t" + "rTDs\t" + "rec\t" + "recYds\t" + "recTDs\t" + "fum\t");
+            Console.WriteLine("Name\t\t\t" + "Pos\t" + "RAtt\t" + "rYds\t" + "rTDs\t" + "rec\t" + "recYds\t" + "recTDs\t" + "fum\t");
             foreach (var wr in wrrbtes) 
             {
-                Console.WriteLine("{0}\t\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t", wr.name, wr.rushAtt, wr.rushYds, wr.rushTDs,
+                Console.WriteLine("{0}\t\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}", wr.name, wr.position, wr.rushAtt, wr.rushYds, wr.rushTDs,
                     wr.rec, wr.recYds, wr.recTDs, wr.fumbles);
             };
-            Console.WriteLine("Name\t\t\t" + "epAtt\t"+ "epMade\t" + "fgAtt\t" + "fgMade\t");
+            Console.WriteLine("Name\t\t\t" + "Pos\t" + "epAtt\t"+ "epMade\t" + "fgAtt\t" + "fgMade\t");
             foreach (var k in kicker)
             {
-                Console.WriteLine("{0}\t\t{1}\t{2}\t{3}\t{4}", k.name, k.epAtt, k.epMade, k.fgAtt, k.fgMade);
+                Console.WriteLine("{0}\t\t{1}\t{2}\t{3}\t{4}\t{5}", k.name, k.position,k.epAtt, k.epMade, k.fgAtt, k.fgMade);
             };
 
 

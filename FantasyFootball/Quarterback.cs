@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FantasyData.Api.Client;
-using FantasyData.Api.Client.Model.NFLv3;
 using MongoDB.Driver;
 using MongoDB.Bson;
 

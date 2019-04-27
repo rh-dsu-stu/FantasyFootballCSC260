@@ -46,16 +46,14 @@ namespace FantasyFootball
             MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
             var db = dbClient.GetDatabase("MyDB");
             var collection = db.GetCollection<GeneralPlayer>(team);
-           // var qb = (Quarterback)collection.AsQueryable().FirstOrDefault(n => n.position == "QB");
-
+            
             var returnteamQB = db.GetCollection<Quarterback>(team).Find(x => x.position.Contains("QB")).ToList();
             var returnteamWR = db.GetCollection<WRRBTE>(team).Find(x => x.position.Contains("WR")).ToList();
             var returnteamRB = db.GetCollection<WRRBTE>(team).Find(x => x.position.Contains("RB")).ToList();
             var returnteamTE = db.GetCollection<WRRBTE>(team).Find(x => x.position.Contains("TE")).ToList();
             var returnteamK = db.GetCollection<Kicker>(team).Find(x => x.position.Contains("K")).ToList();
-              
+             
             var returnteam = new List<GeneralPlayer>();
-            
             
             foreach (var qb in returnteamQB)
                 returnteam.Add(qb);
@@ -68,7 +66,6 @@ namespace FantasyFootball
             foreach (var k in returnteamK)
                 returnteam.Add(k);
             
-
             return returnteam;
         }
             
