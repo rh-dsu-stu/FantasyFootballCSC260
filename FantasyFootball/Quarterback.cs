@@ -5,17 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using FantasyData.Api.Client;
 using FantasyData.Api.Client.Model.NFLv3;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace FantasyFootball
 {
     class Quarterback : GeneralPlayer
     {
+        public ObjectId id;
         public int passAtt;
         public int passCmp;
         public double passYds;
-        public double passCmpPct;
-        public double ydsPerAtt;
-        public double ydsPerCmp;
         public int passTDs;                   // touchdowns
         public int interc;                // interceptions
         public int sacks;
@@ -33,15 +33,22 @@ namespace FantasyFootball
             passAtt = 0;
             passCmp = 0;
             passYds = 0;
-            passCmpPct = 0;
-            ydsPerAtt = 0;
-            ydsPerCmp = 0;
             passTDs = 0;
             interc = 0;
             sacks = 0;
             rushYds = 0;
             rushTDs = 0;
         }
+
+        public Quarterback(string n, int p, string t, string pos, int no)
+        {
+            this.name = n;
+            this.playerID = p;
+            this.team = t;
+            this.position = pos;
+            this.number = no;
+        }
+
 
         public void GetQBStats(Quarterback q, NFLv3StatsClient client, int week)
         {
@@ -52,15 +59,14 @@ namespace FantasyFootball
             q.passAtt = (int)tmpPlayer.PassingAttempts;
             q.passCmp = (int)tmpPlayer.PassingCompletions;
             q.passYds = (double)tmpPlayer.PassingYards;
-            q.passCmpPct = (double)tmpPlayer.PassingCompletionPercentage;
-            q.ydsPerAtt = (double)tmpPlayer.PassingYardsPerAttempt;
-            q.ydsPerCmp = (double)tmpPlayer.PassingYardsPerCompletion;
             q.passTDs = (int)tmpPlayer.Touchdowns;
             q.interc = (int)tmpPlayer.Interceptions;
             q.sacks = (int)tmpPlayer.Sacks;
             q.rushYds = (double)tmpPlayer.RushingYards;
             q.rushTDs = (int)tmpPlayer.RushingTouchdowns;
         }
+
+        
 
     }
 }

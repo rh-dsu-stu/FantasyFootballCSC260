@@ -5,11 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using FantasyData.Api.Client;
 using FantasyData.Api.Client.Model.NFLv3;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace FantasyFootball
 {
     class WRRBTE : GeneralPlayer
     {
+        public ObjectId id;
         public int rushAtt;
         public double rushYds;
         public int rushTDs;
@@ -31,6 +34,15 @@ namespace FantasyFootball
             rec = 0;
             recYds = 0;
             recTDs = 0;
+        }
+
+        public WRRBTE(string n, int p, string t, string pos, int no)
+        {
+            this.name = n;
+            this.playerID = p;
+            this.team = t;
+            this.position = pos;
+            this.number = no;
         }
 
         ~WRRBTE()

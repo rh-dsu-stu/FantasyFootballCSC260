@@ -14,35 +14,55 @@ namespace FantasyFootball
         static void Main(string[] args)
         {
             // Connect to client and get data
-            NFLv3StatsClient client = new NFLv3StatsClient("apikey"); 
-            var projections = client.GetTeamGameStats("2018", 7).OrderByDescending(p => p.PasserRating).Take(20).ToList();
+            NFLv3StatsClient client = new NFLv3StatsClient("apikey");
+            //var projections = client.GetTeamGameStats("2018", 7).OrderByDescending(p => p.PasserRating).Take(20).ToList();
 
-            // Write data to console
-            foreach (var projection in projections)
+
+
+            string teamName = "";
+            GeneralPlayer play = new GeneralPlayer();
+            List<GeneralPlayer> teamList = new List<GeneralPlayer>();
+
+            var userChoice = 1;
+            while (userChoice != 6)
             {
-                Console.WriteLine($"{projection.Team} ({projection.PasserRating}) {projection.PasserRating}");
+                userChoice = Menu.DisplayMenu();
+                switch (userChoice)
+                {
+                    case 1:
+                        Console.WriteLine("Create Team");
+                        var team = new List<GeneralPlayer>();
+                        team = play.FillTeam(client);
+                        teamList = team;
+                        //play.GetStats(team);
+                        break;
+                    case 2:
+                        Database.SaveTeam(teamList);
+                        Console.WriteLine("Team Saved");
+                        break;
+                    case 3:
+                        play.GetStats(teamList);
+                        play.PrintStats(teamList);
+                        break;
+                    case 4:
+                        teamName = Database.ListTeams();
+                        teamList = Database.GetSavedTeam(teamName);
+                        break;
+                    case 5:
+
+
+                        break;
+
+                }
             }
-            Console.ReadKey();
+           
 
-            //var dbClient = new MongoClient("mongodb://127.0.0.1:27017"); 
-            var vom = new GeneralPlayer();
-            vom.name = "Matt Ryan";
-            vom.GetPlayerInfo(vom, client);
-
-            Console.WriteLine($"{vom.playerID} ----- {vom.name} --- {vom.number} ---- {vom.team} ---- {vom.position}");
             Console.ReadKey();
 
 
-
-
-            /*var db = dbClient.GetDatabase("test");
-            var collection = db.GetCollection<User>("test");
-            var document = new User
-            {
-                userName = "Hello"
-            };
-            collection.InsertOne(document);
-            */
+            
+           
+            
 
 
 

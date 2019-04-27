@@ -5,11 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using FantasyData.Api.Client;
 using FantasyData.Api.Client.Model.NFLv3;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace FantasyFootball
 {
     class Kicker : GeneralPlayer 
     {
+        public ObjectId id;
         public int fgAtt;
         public int fgMade;
         public int epAtt;
@@ -28,6 +31,15 @@ namespace FantasyFootball
             fgMade = 0;
             epAtt = 0;
             epMade = 0;
+        }
+
+        public Kicker(string n, int p, string t, string pos, int no)
+        {
+            this.name = n;
+            this.playerID = p;
+            this.team = t;
+            this.position = pos;
+            this.number = no;
         }
 
         ~Kicker()
