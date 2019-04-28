@@ -21,25 +21,27 @@ namespace FantasyFootball
 
         public Kicker()
         {
-            name = "";
-            playerID = 0;
-            team = "";
-            position = "";
-            number = 0;
+            //name = "";
+            //playerID = 0;
+            //team = "";
+            //position = "";
+            //number = 0;
             fumbles = 0;
             fgAtt = 0;
             fgMade = 0;
             epAtt = 0;
             epMade = 0;
+            byeWeek = 0;
         }
 
-        public Kicker(string n, int p, string t, string pos, int no)
+        public Kicker(string n, int p, string t, string pos, int no, int bye)
         {
             this.name = n;
             this.playerID = p;
             this.team = t;
             this.position = pos;
             this.number = no;
+            this.byeWeek = bye;
         }
 
         ~Kicker()
@@ -52,10 +54,17 @@ namespace FantasyFootball
            
             var tmpPlayer = client.GetPlayerGameStatsByPlayerID("2018", week, k.playerID);
 
-            k.epAtt = (int)tmpPlayer.ExtraPointsAttempted;
-            k.epMade = (int)tmpPlayer.ExtraPointsMade;
-            k.fgAtt = (int)tmpPlayer.FieldGoalsAttempted;
-            k.fgMade = (int)tmpPlayer.FieldGoalsMade;
+            if (tmpPlayer != null)
+            {
+                k.epAtt = (int)tmpPlayer.ExtraPointsAttempted;
+                k.epMade = (int)tmpPlayer.ExtraPointsMade;
+                k.fgAtt = (int)tmpPlayer.FieldGoalsAttempted;
+                k.fgMade = (int)tmpPlayer.FieldGoalsMade;
+
+            } else
+            {
+                k = new Kicker();
+            }
 
         }
     }

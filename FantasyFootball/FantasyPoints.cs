@@ -29,6 +29,7 @@ namespace FantasyFootball
         public static void PrintFantasyPoints(List<GeneralPlayer> list)
         {
             Console.WriteLine("Fantasy Points");
+            Console.WriteLine("Name\t\tPoints");
             foreach (var a in list)
             {
                 Console.WriteLine("{0}\t\t{1}", a.name, a.fantasyPts);

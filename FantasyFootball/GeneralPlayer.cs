@@ -13,17 +13,19 @@ namespace FantasyFootball
 {
     // lets the database know the derived classes of this class
     [BsonKnownTypes(typeof(Quarterback), typeof(WRRBTE), typeof(Kicker))]
+
     class GeneralPlayer
     {
-        // these fields apply to every player and should be inheritable by the other classes
+        // these fields apply to every player and are inheritable by the other classes
         public ObjectId Id { get; set; }
         public string name { get; set; }
-        public int playerID { get; set; }
+        public  int playerID { get; set; }
         public string team { get; set; }
         public string position { get; set; }
         public int number { get; set; }
         public int fumbles { get; set; }
         public double fantasyPts { get; set; }
+        public int byeWeek { get; set; }
 
         // default constructor
         // paramaterless constructor can be used when storing objects in mongoDB
@@ -36,6 +38,7 @@ namespace FantasyFootball
             number = 0;
             fumbles = 0;
             fantasyPts = 0;
+            byeWeek = 0;
         }
 
         //destructor
@@ -62,19 +65,29 @@ namespace FantasyFootball
             // going to set a default team to size 7: 1 QB 2 RB 2 WR 1 TE 1 K not including ST/Def
             for (var i = 0; i < 7; i++)
             {
-                player.name = GetPlayersName();
-                GetPlayerInfo(player, client);
+                do
+                {
+                    player = new GeneralPlayer(); // Resets player fields so they do not repeat if null ie found some null bye weeks
+                    player.name = GetPlayersName();
+                    GetPlayerInfo(player, client);
+                    if ( player.playerID == 0)
+                    {
+                        Console.WriteLine("It appears that player does not exist or their name is spelled incorrectly.");
+                        Console.WriteLine("Please try again.");
+                    }
+                } while (player.playerID == 0); // if a playerID is not 0 then a player with that name exists
+                
                 if (player.position == "QB")
                 {
-                    playersTeam.Add(new Quarterback(player.name, player.playerID, player.team, player.position, player.number));
+                    playersTeam.Add(new Quarterback(player.name, player.playerID, player.team, player.position, player.number, player.byeWeek));
                 }
                 if (player.position == "RB" || player.position == "WR" || player.position == "TE")
                 {
-                    playersTeam.Add(new WRRBTE(player.name, player.playerID, player.team, player.position, player.number));
+                    playersTeam.Add(new WRRBTE(player.name, player.playerID, player.team, player.position, player.number, player.byeWeek));
                 }
                 if (player.position == "K")
                 {
-                    playersTeam.Add(new Kicker(player.name, player.playerID, player.team, player.position, player.number));
+                    playersTeam.Add(new Kicker(player.name, player.playerID, player.team, player.position, player.number, player.byeWeek));
                 }
             }
             return playersTeam;
@@ -83,22 +96,63 @@ namespace FantasyFootball
         // function to get the playerID
         public void GetPlayerInfo(GeneralPlayer f, NFLv3StatsClient client)
         {
+            // utilizes the SDK's class to pull data. could not come up with another way
             Predicate<Player> playerFinder = (Player p) => { return p.Name == f.name; };
 
             var tmpPlayer = client.GetPlayers().Find(playerFinder);
 
-            f.playerID = tmpPlayer.PlayerID;
-            f.team = tmpPlayer.Team;
-            f.position = tmpPlayer.Position;
-            f.number = (int)tmpPlayer.Number;
+            if (tmpPlayer != null)
+            {
+                f.playerID = tmpPlayer.PlayerID;
+                f.team = tmpPlayer.Team;
+                f.position = tmpPlayer.Position;
+                f.number = (int)tmpPlayer.Number;
+                if (tmpPlayer.ByeWeek != null)
+                {
+                    f.byeWeek = (int)tmpPlayer.ByeWeek;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error!");
+            }
+            
+        }
+
+        public bool CheckByes(List<GeneralPlayer> list, int week)
+        {
+            bool onBye = false;
+            foreach (var p in list)
+            {
+                if (p.byeWeek == week)
+                {
+                    Console.WriteLine("Player {0} is on bye week {1}.", p.name, p.byeWeek);
+                    Console.WriteLine("Please create a new team without any byes for this week.");
+                    onBye = true;
+                }
+            }
+            return onBye;
+        }
+
+        public int GetStatWeek()
+        {
+            var week = 0;
+            do
+            {
+                Console.WriteLine("What week would you like stats for?");
+                Console.WriteLine("Please enter a number between 1 and 17");
+                week = Convert.ToInt32(Console.ReadLine());
+            } while (week <= 1 && week >= 17);
+
+
+            return week;
         }
 
         // seperates the list into lists of player types and then gets their stats
-        public void GetStats(List<GeneralPlayer> list, NFLv3StatsClient client)
+        public void GetStats(List<GeneralPlayer> list, NFLv3StatsClient client, int week)
         {
-            Console.WriteLine("What week would you like stats for?");
-            Console.WriteLine("Please enter a number between 1 and 17");
-            var week = Convert.ToInt32(Console.ReadLine());
+            
+            
             var quarters = list.OfType<Quarterback>();
             var wrrbtes = list.OfType<WRRBTE>();
             var kicker = list.OfType<Kicker>();

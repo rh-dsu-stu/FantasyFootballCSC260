@@ -37,15 +37,17 @@ namespace FantasyFootball
             sacks = 0;
             rushYds = 0;
             rushTDs = 0;
+            byeWeek = 0;
         }
 
-        public Quarterback(string n, int p, string t, string pos, int no)
+        public Quarterback(string n, int p, string t, string pos, int no, int bye)
         {
             this.name = n;
             this.playerID = p;
             this.team = t;
             this.position = pos;
             this.number = no;
+            this.byeWeek = bye;
         }
 
 
@@ -54,15 +56,23 @@ namespace FantasyFootball
             var currSeason = "2018";
             var tmpPlayer = client.GetPlayerGameStatsByPlayerID(currSeason, week, q.playerID);
 
-            q.fumbles = (int)tmpPlayer.Fumbles;
-            q.passAtt = (int)tmpPlayer.PassingAttempts;
-            q.passCmp = (int)tmpPlayer.PassingCompletions;
-            q.passYds = (double)tmpPlayer.PassingYards;
-            q.passTDs = (int)tmpPlayer.Touchdowns;
-            q.interc = (int)tmpPlayer.Interceptions;
-            q.sacks = (int)tmpPlayer.Sacks;
-            q.rushYds = (double)tmpPlayer.RushingYards;
-            q.rushTDs = (int)tmpPlayer.RushingTouchdowns;
+            if (tmpPlayer != null)
+            {
+                q.fumbles = (int)tmpPlayer.Fumbles;
+                q.passAtt = (int)tmpPlayer.PassingAttempts;
+                q.passCmp = (int)tmpPlayer.PassingCompletions;
+                q.passYds = (double)tmpPlayer.PassingYards;
+                q.passTDs = (int)tmpPlayer.PassingTouchdowns;
+                q.interc = (int)tmpPlayer.Interceptions;
+                q.sacks = (int)tmpPlayer.Sacks;
+                q.rushYds = (double)tmpPlayer.RushingYards;
+                q.rushTDs = (int)tmpPlayer.RushingTouchdowns;
+            }
+            else
+            {   // if the player did not play that week for a reason other than a bye wekk their stats will be zero'd
+                // this was necessary because the API does not maintain weekly records for inactive players
+                q = new Quarterback();
+            }
         }
 
         

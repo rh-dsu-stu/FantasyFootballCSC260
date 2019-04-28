@@ -27,6 +27,7 @@ namespace FantasyFootball
             team = "";
             position = "";
             number = 0;
+            byeWeek = 0;
             fumbles = 0;
             rushAtt = 0;
             rushYds = 0;
@@ -36,13 +37,14 @@ namespace FantasyFootball
             recTDs = 0;
         }
 
-        public WRRBTE(string n, int p, string t, string pos, int no)
+        public WRRBTE(string n, int p, string t, string pos, int no, int bye)
         {
             this.name = n;
             this.playerID = p;
             this.team = t;
             this.position = pos;
             this.number = no;
+            this.byeWeek = bye;
         }
 
         ~WRRBTE()
@@ -54,13 +56,19 @@ namespace FantasyFootball
         { 
             var tmpPlayer = client.GetPlayerGameStatsByPlayerID("2018", week, b.playerID);
 
-            b.fumbles = (int)tmpPlayer.Fumbles;
-            b.rushAtt = (int)tmpPlayer.RushingAttempts;
-            b.rushYds = (double)tmpPlayer.RushingYards;
-            b.rushTDs = (int)tmpPlayer.RushingTouchdowns;
-            b.rec = (int)tmpPlayer.Receptions;
-            b.recYds = (double)tmpPlayer.ReceivingYards;
-            b.recTDs = (int)tmpPlayer.ReceivingTouchdowns;
+            if ( tmpPlayer != null)
+            {
+                b.fumbles = (int)tmpPlayer.Fumbles;
+                b.rushAtt = (int)tmpPlayer.RushingAttempts;
+                b.rushYds = (double)tmpPlayer.RushingYards;
+                b.rushTDs = (int)tmpPlayer.RushingTouchdowns;
+                b.rec = (int)tmpPlayer.Receptions;
+                b.recYds = (double)tmpPlayer.ReceivingYards;
+                b.recTDs = (int)tmpPlayer.ReceivingTouchdowns;
+            } else
+            {
+                b = new WRRBTE();
+            }
             
         }
     }

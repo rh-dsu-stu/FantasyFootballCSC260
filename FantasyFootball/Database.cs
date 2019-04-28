@@ -10,16 +10,35 @@ namespace FantasyFootball
 {
     class Database
     {
-        
-        
 
         public static void SaveTeam(List<GeneralPlayer> list)
         {
             MongoClient dbClient = new MongoClient("mongodb://127.0.0.1:27017");
             var db = dbClient.GetDatabase("MyDB");
 
-            Console.WriteLine("What is the name of the team?");
-            var teamName = Console.ReadLine();
+            
+            
+            var col = db.ListCollectionNames();
+            var all = col.ToList();
+            var teamName = "";
+
+            bool isATeam = false;
+            do
+            { // prevents user from overwriting an already created team
+                Console.WriteLine("What is the name of the team?");
+                teamName = Console.ReadLine();
+                isATeam = false;
+                foreach (var c in all)
+                {
+                    if (teamName.Equals(c))
+                    {
+                        isATeam = true;
+                        Console.WriteLine("There is a team with that name!");
+                    }
+                }
+
+            } while (isATeam);
+
             var collection = db.GetCollection<GeneralPlayer>(teamName);
             collection.InsertMany(list);
         }
@@ -36,8 +55,21 @@ namespace FantasyFootball
             {
                 Console.WriteLine("{0}", c);
             }
-            Console.WriteLine("Please enter a team name from the list above.");
-            teamtoreturn = Console.ReadLine();
+            bool isATeam = false;
+            do
+            { // prevents user from selecting a team that does not exist
+                Console.WriteLine("Please enter a team name from the list above.");
+                teamtoreturn = Console.ReadLine();
+                foreach ( var c in all)
+                {
+                    if (teamtoreturn.Equals(c))
+                    {
+                        isATeam = true;
+                    }
+                }
+
+            } while (!isATeam);
+            
             return teamtoreturn;
         }
 
