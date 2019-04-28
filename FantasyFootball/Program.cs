@@ -14,7 +14,8 @@ namespace FantasyFootball
         static void Main(string[] args)
         {
             // Connect to client and get data
-            NFLv3StatsClient client = new NFLv3StatsClient("1996605cd1e84deeae0aab46b07dcf83");
+            // Please grab your own free apikey SportsData.io
+            NFLv3StatsClient client = new NFLv3StatsClient("apikey");
             //var projections = client.GetTeamGameStats("2018", 7).OrderByDescending(p => p.PasserRating).Take(20).ToList();
 
             var week = 0;
