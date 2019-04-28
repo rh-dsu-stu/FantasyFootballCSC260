@@ -67,7 +67,6 @@ namespace FantasyFootball
                 if (p)
                 {
                     total += wr.rec * 1;
-                    Console.WriteLine("p is {0}", p);
                 }
                 wr.fantasyPts = Math.Round(total, 2);
 
