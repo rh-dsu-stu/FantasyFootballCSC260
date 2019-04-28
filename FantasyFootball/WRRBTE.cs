@@ -22,11 +22,11 @@ namespace FantasyFootball
 
         public WRRBTE()
         {
-            name = "";
-            playerID = 0;
-            team = "";
-            position = "";
-            number = 0;
+            //name = "";
+            //playerID = 0;
+            //team = "";
+            //position = "";
+            //number = 0;
             byeWeek = 0;
             fumbles = 0;
             rushAtt = 0;

@@ -23,11 +23,11 @@ namespace FantasyFootball
         
         public Quarterback()
         {
-            name = "";
-            playerID = 0;
-            team = "";
-            position = "";
-            number = 0;
+            //name = "";
+            //playerID = 0;
+            //team = "";
+            //position = "";
+            //number = 0;
             fumbles = 0;
             passAtt = 0;
             passCmp = 0;

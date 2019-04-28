@@ -17,7 +17,7 @@ namespace FantasyFootball
     class GeneralPlayer
     {
         // these fields apply to every player and are inheritable by the other classes
-        public ObjectId Id { get; set; }
+        public ObjectId Id { get; set; } // for mongo db
         public string name { get; set; }
         public  int playerID { get; set; }
         public string team { get; set; }

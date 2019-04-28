@@ -11,7 +11,7 @@ using FantasyData.Api.Client.Model.NFLv3;
 
 namespace FantasyFootball
 {
-    class Menu : GeneralPlayer
+    class  Menu
     {
         private static readonly string _menuItems = 
             "Welcome to the Fantasy Football Calculator App!\n" +
